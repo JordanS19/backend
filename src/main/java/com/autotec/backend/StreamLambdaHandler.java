@@ -1,16 +1,21 @@
 package com.autotec.backend;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import com.amazonaws.serverless.exceptions.ContainerInitializationException;
 import com.amazonaws.serverless.proxy.model.AwsProxyRequest;
 import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
 import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
 import com.amazonaws.serverless.proxy.spring.SpringBootProxyHandlerBuilder;
-import com.amazonaws.serverless.proxy.spring.SpringBootRequestHandler;
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 
 /**
  * Lambda handler for API Gateway using aws-serverless-java-container.
  */
-public class StreamLambdaHandler extends SpringBootRequestHandler<AwsProxyRequest, AwsProxyResponse> {
+public class StreamLambdaHandler implements RequestStreamHandler {
 
     private static final SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> HANDLER;
 
@@ -18,7 +23,6 @@ public class StreamLambdaHandler extends SpringBootRequestHandler<AwsProxyReques
         try {
             HANDLER = new SpringBootProxyHandlerBuilder<AwsProxyRequest>()
                     .defaultProxy()
-                    .asyncInit()
                     .springBootApplication(BackendApplication.class)
                     .buildAndInitialize();
         } catch (ContainerInitializationException e) {
@@ -26,7 +30,9 @@ public class StreamLambdaHandler extends SpringBootRequestHandler<AwsProxyReques
         }
     }
 
-    public StreamLambdaHandler() {
-        super(HANDLER);
+    @Override
+    public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context)
+            throws IOException {
+        HANDLER.proxyStream(inputStream, outputStream, context);
     }
 }
