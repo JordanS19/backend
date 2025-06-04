@@ -1,0 +1,72 @@
+enum UserType {
+  OWNER
+  CLIENT
+  GUEST
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  type: UserType!
+}
+
+type Services {
+  id: ID!
+  name: String!
+  description: String!
+  price: Float!
+  durationMinutes: Int!
+}
+
+type Appointment {
+  id: ID!
+  userId: ID!
+  serviceId: ID!
+  date: String!
+  time: String!
+  status: String!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  description: String
+  price: Float!
+  stock: Int!
+}
+
+type Query {
+  getAllUsers: [User!]!
+  getUserById(id: ID!): User
+
+  getAllServices: [Services!]!
+  getServiceById(id: ID!): Services
+
+  getAllAppointments: [Appointment!]!
+  getAppointmentsByUser(userId: ID!): [Appointment!]!
+  getAppointmentById(id: ID!): Appointment
+
+  getAllProducts: [Product!]!
+  getProductById(id: ID!): Product
+  searchProductsByName(name: String!): [Product!]!
+}
+
+type Mutation {
+  createUser(name: String!, email: String!, type: UserType!): User!
+  createUserIfNotExists(sub: String!, name: String!, email: String!, type: UserType!): User!
+  updateUser(id: ID!, name: String, email: String, type: UserType): User
+  deleteUser(id: ID!): Boolean
+
+  createService(name: String!, description: String!, price: Float!, durationMinutes: Int!): Services!
+  updateService(id: ID!, name: String, description: String, price: Float, durationMinutes: Int): Services
+  deleteService(id: ID!): Boolean
+  
+  createAppointment(userId: ID!, serviceId: ID!, date: String!, time: String!, status: String!): Appointment!
+  updateAppointment(id: ID!, userId: ID, serviceId: ID, date: String, time: String, status: String): Appointment
+  deleteAppointment(id: ID!): Boolean
+
+  createProduct(name: String!, description: String, price: Float!, stock: Int!): Product!
+  updateProduct(id: ID!, name: String, description: String, price: Float, stock: Int): Product
+  deleteProduct(id: ID!): Boolean
+}
