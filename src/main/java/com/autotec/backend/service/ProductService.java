@@ -36,14 +36,14 @@ public class ProductService {
         return product;
     }
 
-    public Product updateProduct(Product newData) {
-        Product existing = productTable.getItem(r -> r.key(k -> k.partitionValue(newData.getId())));
+    public Product updateProduct(String id, String name, String description, Double price, Integer stock) {
+        Product existing = productTable.getItem(r -> r.key(k -> k.partitionValue(id)));
         if (existing == null) return null;
 
-        if (newData.getName() != null) existing.setName(newData.getName());
-        if (newData.getDescription() != null) existing.setDescription(newData.getDescription());
-        if (newData.getPrice() != 0.0) existing.setPrice(newData.getPrice());
-        if (newData.getStock() != 0) existing.setStock(newData.getStock());
+        if (name != null) existing.setName(name);
+        if (description != null) existing.setDescription(description);
+        if (price != null) existing.setPrice(price);
+        if (stock != null) existing.setStock(stock);
 
         productTable.putItem(existing);
 

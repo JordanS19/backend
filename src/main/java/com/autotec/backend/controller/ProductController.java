@@ -57,13 +57,7 @@ public class ProductController {
         @Argument Double price,
         @Argument Integer stock
     ) {
-        Product p = new Product();
-        p.setId(id);
-        p.setName(name);
-        p.setDescription(description);
-        if (price != null) p.setPrice(price);
-        if (stock != null) p.setStock(stock);
-        return productService.updateProduct(p);
+        return productService.updateProduct(id, name, description, price, stock);
     }
 
     @MutationMapping
