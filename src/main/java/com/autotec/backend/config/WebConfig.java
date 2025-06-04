@@ -14,7 +14,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/graphql")
-                        .allowedOrigins("http://localhost:5173")
+                        .allowedOriginPatterns("*")
                         .allowedMethods("GET", "POST")
                         .allowedHeaders("*")
                         .allowCredentials(true);
